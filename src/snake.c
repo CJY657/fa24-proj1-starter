@@ -47,24 +47,38 @@ int main(int argc, char *argv[]) {
     // TODO: If the file doesn't exist, return -1
     // TODO: Then call initialize_snakes on the state you made
     // TODO: close file pointer
+    
+    FILE *f = fopen(in_filename, "r");
+    if(f == NULL){
+      return -1;
+    }
+    state = load_board(f);
+    state = initialize_snakes(state);
+    fclose(f);
   } else if (io_stdin) {
     // TODO: Load the board from stdin
     // TODO: Then call initialize_snakes on the state you made
+    state = load_board(stdin);
+    state = initialize_snakes(state);
   } else {
+    state = create_default_state();
     // TODO: Create default state
   }
 
-  // TODO: Update state. Use the deterministic_food function
+// TODO: Update state. Use the deterministic_food function
+  deterministic_food(state);
   // (already implemented in snake_utils.h) to add food.
 
   // Write updated board to file or stdout
   if (out_filename != NULL) {
     // TODO: Save the board to out_filename
+    save_board(state, out_filename);
   } else {
     // TODO: Print the board to stdout
+    print_board(state, stdout);
   }
 
   // TODO: Free the state
-
+  free_state(state);
   return 0;
 }
